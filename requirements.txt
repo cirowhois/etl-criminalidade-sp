@@ -1,0 +1,15 @@
+apache-sedona==1.7.0
+fiona==1.10.1
+folium==0.19.2
+geopandas==1.0.1
+matplotlib==3.10.0
+npm==0.1.1
+numpy==1.26.4
+pandas==1.5.3
+pyproj==3.7.0
+pyspark==3.5.3
+tqdm==4.67.1
+wget==3.2
+openpyxl==3.1.5
+pyarrow==19.0.1
+pydeck==0.9.1
