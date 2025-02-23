@@ -25,6 +25,7 @@
     - wget==3.2
     - openpyxl==3.1.5
     - pyarrow==19.0.1
+    - pydeck==0.9.1
 ```
 ### Estrutura:
 - src
