@@ -54,6 +54,6 @@
 
         _Apoio para ingestão/download dos dados de base_
 - `requirements.txt`
-- `setupe.sh`
+- `setup.sh`
 
     _Configura o ambiente com as bibliotecas necessárias_
