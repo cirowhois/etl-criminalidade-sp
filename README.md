@@ -1,6 +1,4 @@
-# etl-criminalidade-sp
-
-# Projeto Aplicado
+# Projeto Aplicado XPE
 
 ### Fontes:
 - SSPSP: https://www.ssp.sp.gov.br/estatistica/consultas 
