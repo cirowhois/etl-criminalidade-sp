@@ -1,114 +1,232 @@
 {
-    "name": "etl_pipeline_config",
-    "description": "Configuration file for ETL pipeline to process criminal data and sector censitary data from state of São Paulo.",
-    "author": "Ciro Ruiz Vicente da Silva",
-    "spark_config": {
-        "spark_master": "local[*]",
-        "sedona_jars": {
-            "packages": "org.apache.sedona:sedona-spark-3.5_2.12:1.7.0,org.datasyslab:geotools-wrapper:1.7.0-28.5",
-            "repositories": "https://artifacts.unidata.ucar.edu/repository/unidata-all"
-        },
-        "spark_driver_memory": "4g",
-        "spark_executor_memory": "6g",
-        "spark_executor_instances": 2,
-        "spark_driver_cores": 2,
-        "spark_executor_cores": 3
+  "name": "etl_pipeline_config",
+  "description": "Configuration file for ETL pipeline to process criminal data and sector censitary data from state of São Paulo.",
+  "author": "Ciro Ruiz Vicente da Silva",
+  "spark_config": {
+    "spark_master": "local[*]",
+    "sedona_jars": {
+      "packages": "org.apache.sedona:sedona-spark-3.5_2.12:1.7.0,org.datasyslab:geotools-wrapper:1.7.0-28.5",
+      "repositories": "https://artifacts.unidata.ucar.edu/repository/unidata-all"
     },
-    "ibge": {
-        "name": "IBGE - SCs + Sociodemographic Data",
-        "source": {
-            "type": "ftp",
-            "ftp_host": "geoftp.ibge.gov.br",
-            "ftp_url": "/organizacao_do_territorio/malhas_territoriais/malhas_de_setores_censitarios__divisoes_intramunicipais/censo_2022/setores/gpkg/BR/",
-            "format": "gpkg"
-        },
-        "datalake_zones": {
-            "raw": {
-                "format": "gpkg",
-                "path": "data/raw/ibge/scs"
-            },
-            "dispatch": {
-                "format": "geoparquet",
-                "path": "data/dispatch/source=ibge/data=scs"
-            },
-            "processed": {
-                "format": "geoparquet",
-                "path": "data/processed/source=ibge/data=scs"
-            }
-        }
-    },
+    "spark_driver_memory": "4g",
+    "spark_executor_memory": "6g",
+    "spark_executor_instances": 2,
+    "spark_driver_cores": 2,
+    "spark_executor_cores": 3
+  },
+  "landing_area": {
+    "ibge": [
+      {
+        "name": "IBGE - SCs x Sociodemographics",
+        "type": "ftp",
+        "ftp_host": "ftp.ibge.gov.br",
+        "ftp_url": "/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Setor_csv/",
+        "format": "zip",
+        "file_name": "Agregados_por_setores_basico_BR.zip",
+        "raw_path": "data/raw/ibge/sociodemographics"
+      },
+      {
+        "name": "IBGE - SCs",
+        "type": "ftp",
+        "ftp_host": "geoftp.ibge.gov.br",
+        "ftp_url": "/organizacao_do_territorio/malhas_territoriais/malhas_de_setores_censitarios__divisoes_intramunicipais/censo_2022/setores/gpkg/BR/",
+        "format": "gpkg",
+        "file_name": "BR_setores_CD2022.gpkg",
+        "raw_path": "data/raw/ibge/scs"
+      }
+    ],
     "sspsp": [
-        {
-            "name": "Criminality - Cellphones",
-            "source": {
-                "type": "url",
-                "years": [2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017],
-                "url": "https://www.ssp.sp.gov.br/assets/estatistica/transparencia/baseDados/celularesSub/CelularesSubtraidos_{}.xlsx",
-                "format": "xlsx"
-            },
-            "datalake_zones": {
-                "raw": {
-                    "format": "xlsx",
-                    "sheets_all": false,
-                    "path": "data/raw/sspsp/criminality/cellphones"
-                },
-                "dispatch": {
-                    "format": "geoparquet",
-                    "path": "data/dispatch/source=sspsp/data=criminality/type=cellphones"
-                },
-                "processed": {
-                    "format": "geoparquet",
-                    "path": "data/processed/source=sspsp/data=criminality/type=cellphones"
-                }
-            }
-        },
-        {
-            "name": "Criminality - Vehicles",
-            "source": {
-                "type": "url",
-                "years": [2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017],
-                "url": "https://www.ssp.sp.gov.br/assets/estatistica/transparencia/baseDados/veiculosSub/VeiculosSubtraidos_{}.xlsx",
-                "format": "xlsx"
-            },
-            "datalake_zones": {
-                "raw": {
-                    "format": "xlsx",
-                    "sheets_all": false,
-                    "path": "data/raw/sspsp/criminality/vehicles"
-                },
-                "dispatch": {
-                    "format": "geoparquet",
-                    "path": "data/dispatch/source=sspsp/data=criminality/type=vehicles"
-                },
-                "processed": {
-                    "format": "geoparquet",
-                    "path": "data/processed/source=sspsp/data=criminality/type=vehicles"
-                }
-            }
-        },
-        {
-            "name": "Criminality - Other Crimes",
-            "source": {
-                "type": "url",
-                "years": [2024, 2023, 2022],
-                "url": "https://www.ssp.sp.gov.br/assets/estatistica/transparencia/spDados/SPDadosCriminais_{}.xlsx",
-                "format": "xlsx"
-            },
-            "datalake_zones": {
-                "raw": {
-                    "format": "xlsx",
-                    "sheets_all": true,
-                    "path": "data/raw/sspsp/criminality/other_crimes"
-                },
-                "dispatch": {
-                    "format": "geoparquet",
-                    "path": "data/dispatch/source=sspsp/data=criminality/type=other_crimes"
-                },
-                "processed": {
-                    "format": "geoparquet",
-                    "path": "data/processed/source=sspsp/data=criminality/type=other_crimes"
-                }
-            }
-        }
+      {
+        "name": "Criminality - Cellphones",
+        "type": "url",
+        "years": [
+          2024,
+          2023,
+          2022,
+          2021,
+          2020,
+          2019,
+          2018,
+          2017
+        ],
+        "url": "https://www.ssp.sp.gov.br/assets/estatistica/transparencia/baseDados/celularesSub/CelularesSubtraidos_{}.xlsx",
+        "format": "xlsx",
+        "raw_path": "data/raw/criminality/cellphones"
+      },
+      {
+        "name": "Criminality - Vehicles",
+        "type": "url",
+        "years": [
+          2024,
+          2023,
+          2022,
+          2021,
+          2020,
+          2019,
+          2018,
+          2017
+        ],
+        "url": "https://www.ssp.sp.gov.br/assets/estatistica/transparencia/baseDados/veiculosSub/VeiculosSubtraidos_{}.xlsx",
+        "format": "xlsx",
+        "raw_path": "data/raw/criminality/vehicles"
+      },
+      {
+        "name": "Criminality - Other Crimes",
+        "type": "url",
+        "years": [
+          2024,
+          2023,
+          2022
+        ],
+        "url": "https://www.ssp.sp.gov.br/assets/estatistica/transparencia/spDados/SPDadosCriminais_{}.xlsx",
+        "format": "xlsx",
+        "raw_path": "data/raw/criminality/other_crimes"
+      }
     ]
+  },
+  "data_lake": [
+    {
+      "bronze": [
+        {
+          "name": "bronze_scs_demographics",
+          "input": "data/raw/ibge/sociodemographics",
+          "output": "bronze_scs_demographics",
+          "format": "parquet"
+        },
+        {
+          "name": "bronze_scs_geom",
+          "input": "data/raw/ibge/scs",
+          "output": "bronze_scs_geom",
+          "format": "parquet"
+        },
+        {
+          "name": "bronze_crimes_cellphones",
+          "input": "data/raw/sspsp/criminality/cellphones",
+          "output": "bronze_crimes_cellphones",
+          "format": "parquet"
+        },
+        {
+          "name": "bronze_crimes_vechicles",
+          "input": "data/raw/sspsp/criminality/vehicles",
+          "output": "bronze_crimes_vehicles"
+        },
+        {
+          "name": "bronze_crimes_others",
+          "input": "data/raw/sspsp/criminality/other_crimes",
+          "output": "bronze_crimes_others",
+          "format": "parquet"
+        }
+      ],
+      "silver": [
+        {
+          "name": "silver_scs_demographics",
+          "input": [
+            "bronze_scs_demographics"
+          ],
+          "output": "silver_scs_demographics",
+          "format": "geoparquet"
+        },
+        {
+          "name": "silver_mun_demographics",
+          "input": [
+            "bronze_scs_demographics"
+          ],
+          "output": "silver_mun_demographics",
+          "format": "geoparquet"
+        },
+        {
+          "name": "silver_scs_geom",
+          "input": [
+            "bronze_scs_geom"
+          ],
+          "output": "silver_scs_geom",
+          "format": "geoparquet"
+        },
+        {
+          "name": "silver_mun_geom",
+          "input": [
+            "bronze_scs_geom"
+          ],
+          "output": "silver_mun_geom",
+          "format": "geoparquet"
+        },
+        {
+          "name": "silver_scs",
+          "input": [
+            "silver_scs_demographics",
+            "silver_scs_geom"
+          ],
+          "output": "silver_scs",
+          "format": "geoparquet"
+        },
+        {
+          "name": "silver_mun",
+          "input": [
+            "silver_mun_demographics",
+            "silver_mun_geom"
+          ],
+          "output": "silver_mun",
+          "format": "geoparquet"
+        },
+        {
+          "name": "silver_crimes_cellphones",
+          "input": [
+            "bronze_crimes_cellphones"
+          ],
+          "output": "silver_crimes_cellphones",
+          "format": "geoparquet"
+        },
+        {
+          "name": "silver_crimes_vehicles",
+          "input": [
+            "bronze_crimes_vehicles"
+          ],
+          "output": "silver_crimes_vehicles",
+          "format": "geoparquet"
+        },
+        {
+          "name": "silver_crimes_others",
+          "input": [
+            "bronze_crimes_others"
+          ],
+          "output": "silver_crimes_others",
+          "format": "geoparquet"
+        },
+        {
+          "name": "silver_crimes",
+          "input": [
+            "silver_crimes_cellphones",
+            "silver_crimes_vehicles",
+            "silver_crimes_others"
+          ],
+          "output": "silver_crimes",
+          "format": "geoparquet"
+        }
+      ],
+      "gold": [
+        {
+          "name": "gold_crimes_scs",
+          "input": [
+            "silver_scs",
+            "silver_crimes_cellphones",
+            "silver_crimes_vehicles",
+            "silver_crimes_others"
+          ],
+          "output": "gold_crimes_scs",
+          "format": "geoparquet"
+        },
+        {
+          "name": "gold_crimes_mun",
+          "input": [
+            "silver_mun",
+            "silver_crimes_cellphones",
+            "silver_crimes_vehicles",
+            "silver_crimes_others"
+          ],
+          "output": "gold_crimes_mun",
+          "format": "geoparquet"
+        }
+      ]
+    }
+  ]
 }

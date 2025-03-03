@@ -47,12 +47,9 @@
     - `config.json` 
 
         _Configurações do projeto_
-    - `utils.py` 
+    - `ingestion.py`
 
-        _Pequena lib de apoio_
-    - `ingestion.py` _(em construção)_
-
-        _Apoio para ingestão/download dos dados de base_
+        _Ingestão/download dos dados de base_
 - `requirements.txt`
 - `setup.sh`
 
