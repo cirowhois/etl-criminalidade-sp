@@ -47,11 +47,9 @@ class SSPSPIngestion:
                 logging.info(f"Data {file_name} downloaded")
             else:
                 logging.error(f"Error to download data {response.status_code}")
-                return
         except Exception as error:
             logging.error("Error to download data ",error)
-            return
-            #raise Exception("Error to download data ",error)
+            raise Exception("Error to download data ",error)
 
     def download_all(self):
         for dict in self.__json_config:
