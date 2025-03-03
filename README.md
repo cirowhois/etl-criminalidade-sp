@@ -27,6 +27,7 @@
     - wget==3.2
     - openpyxl==3.1.5
     - pyarrow==19.0.1
+    - pydeck==0.9.1
 ```
 ### Estrutura:
 - src
@@ -48,13 +49,10 @@
     - `config.json` 
 
         _Configurações do projeto_
-    - `utils.py` 
+    - `ingestion.py`
 
-        _Pequena lib de apoio_
-    - `ingestion.py` _(em construção)_
-
-        _Apoio para ingestão/download dos dados de base_
+        _Ingestão/download dos dados de base_
 - `requirements.txt`
-- `setupe.sh`
+- `setup.sh`
 
     _Configura o ambiente com as bibliotecas necessárias_
