@@ -1,8 +1,8 @@
 import requests
 import logging
 import os
-import pandas as pd
 import json
+import time
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
@@ -18,14 +18,14 @@ class SSPSPIngestion:
             return json.load(file)
 
     def load_config(self,json):
-        name = json['name']
         years = json['years']
         ref_url = json['url']
         path = json['raw_path']
-        return name, years, ref_url, path
+        return years, ref_url, path
        
     def download(self,url,path)->None:
         try:
+            stage_time = time.time()
             file_name = url.split('/')[-1]
             logging.info(f"Dowloading criminal data for {file_name}")
             os.makedirs(path, exist_ok=True)
@@ -48,7 +48,8 @@ class SSPSPIngestion:
                     for chunk in response.iter_content(chunk_size=8192):
                         if chunk:
                             f.write(chunk)
-                logging.info(f"Data {file_name} downloaded")
+                elapsed_time = time.time() - stage_time
+                logging.info(f"Data {file_name} downloaded in {elapsed_time}s")
             else:
                 logging.error(f"Error to download data {response.status_code}")
                 raise
@@ -57,11 +58,13 @@ class SSPSPIngestion:
             raise
 
     def download_all(self):
+        start_time = time.time()
         config = self.load_json(self.__file_path)
         sspsp_config = config["landing_area"]['sspsp']
         for dict in sspsp_config:
-            name, years, ref_url, path = self.load_config(dict)
-            logging.info(f"Downloading SSPSP data for {name}")
+            years, ref_url, path = self.load_config(dict)
             for year in years:
                 #logging.info(ref_url.format(year))
                 self.download(ref_url.format(year),path)
+        elapsed_time = time.time() - start_time
+        logging.info(f"SSPSP data downloaded in {elapsed_time}s")

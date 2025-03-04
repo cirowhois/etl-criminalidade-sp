@@ -39,16 +39,7 @@
       {
         "name": "Criminality - Cellphones",
         "type": "url",
-        "years": [
-          2024,
-          2023,
-          2022,
-          2021,
-          2020,
-          2019,
-          2018,
-          2017
-        ],
+        "years": [2024,2023,2022,2021,2020,2019,2018,2017],
         "url": "https://www.ssp.sp.gov.br/assets/estatistica/transparencia/baseDados/celularesSub/CelularesSubtraidos_{}.xlsx",
         "format": "xlsx",
         "raw_path": "data/raw/criminality/cellphones"
@@ -56,16 +47,7 @@
       {
         "name": "Criminality - Vehicles",
         "type": "url",
-        "years": [
-          2024,
-          2023,
-          2022,
-          2021,
-          2020,
-          2019,
-          2018,
-          2017
-        ],
+        "years": [2024,2023,2022,2021,2020,2019,2018,2017],
         "url": "https://www.ssp.sp.gov.br/assets/estatistica/transparencia/baseDados/veiculosSub/VeiculosSubtraidos_{}.xlsx",
         "format": "xlsx",
         "raw_path": "data/raw/criminality/vehicles"
@@ -73,160 +55,160 @@
       {
         "name": "Criminality - Other Crimes",
         "type": "url",
-        "years": [
-          2024,
-          2023,
-          2022
-        ],
+        "years": [2024,2023,2022],
         "url": "https://www.ssp.sp.gov.br/assets/estatistica/transparencia/spDados/SPDadosCriminais_{}.xlsx",
         "format": "xlsx",
         "raw_path": "data/raw/criminality/other_crimes"
       }
     ]
   },
-  "data_lake": [
-    {
-      "bronze": [
-        {
-          "name": "bronze_scs_demographics",
-          "input": "data/raw/ibge/sociodemographics",
-          "output": "bronze_scs_demographics",
-          "format": "parquet"
-        },
-        {
-          "name": "bronze_scs_geom",
-          "input": "data/raw/ibge/scs",
-          "output": "bronze_scs_geom",
-          "format": "parquet"
-        },
-        {
-          "name": "bronze_crimes_cellphones",
-          "input": "data/raw/sspsp/criminality/cellphones",
-          "output": "bronze_crimes_cellphones",
-          "format": "parquet"
-        },
-        {
-          "name": "bronze_crimes_vechicles",
-          "input": "data/raw/sspsp/criminality/vehicles",
-          "output": "bronze_crimes_vehicles"
-        },
-        {
-          "name": "bronze_crimes_others",
-          "input": "data/raw/sspsp/criminality/other_crimes",
-          "output": "bronze_crimes_others",
-          "format": "parquet"
-        }
-      ],
-      "silver": [
-        {
-          "name": "silver_scs_demographics",
-          "input": [
-            "bronze_scs_demographics"
-          ],
-          "output": "silver_scs_demographics",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_mun_demographics",
-          "input": [
-            "bronze_scs_demographics"
-          ],
-          "output": "silver_mun_demographics",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_scs_geom",
-          "input": [
-            "bronze_scs_geom"
-          ],
-          "output": "silver_scs_geom",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_mun_geom",
-          "input": [
-            "bronze_scs_geom"
-          ],
-          "output": "silver_mun_geom",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_scs",
-          "input": [
-            "silver_scs_demographics",
-            "silver_scs_geom"
-          ],
-          "output": "silver_scs",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_mun",
-          "input": [
-            "silver_mun_demographics",
-            "silver_mun_geom"
-          ],
-          "output": "silver_mun",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_crimes_cellphones",
-          "input": [
-            "bronze_crimes_cellphones"
-          ],
-          "output": "silver_crimes_cellphones",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_crimes_vehicles",
-          "input": [
-            "bronze_crimes_vehicles"
-          ],
-          "output": "silver_crimes_vehicles",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_crimes_others",
-          "input": [
-            "bronze_crimes_others"
-          ],
-          "output": "silver_crimes_others",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_crimes",
-          "input": [
-            "silver_crimes_cellphones",
-            "silver_crimes_vehicles",
-            "silver_crimes_others"
-          ],
-          "output": "silver_crimes",
-          "format": "geoparquet"
-        }
-      ],
-      "gold": [
-        {
-          "name": "gold_crimes_scs",
-          "input": [
-            "silver_scs",
-            "silver_crimes_cellphones",
-            "silver_crimes_vehicles",
-            "silver_crimes_others"
-          ],
-          "output": "gold_crimes_scs",
-          "format": "geoparquet"
-        },
-        {
-          "name": "gold_crimes_mun",
-          "input": [
-            "silver_mun",
-            "silver_crimes_cellphones",
-            "silver_crimes_vehicles",
-            "silver_crimes_others"
-          ],
-          "output": "gold_crimes_mun",
-          "format": "geoparquet"
-        }
-      ]
-    }
-  ]
+  "data_lake": {
+    "bronze": [
+      {
+        "name": "bronze_scs_demographics",
+        "input": "data/raw/ibge/sociodemographics/Agregados_por_setores_basico_BR.csv",
+        "output": "bronze_scs_demographics",
+        "format": "parquet",
+        "years":[2022]
+      },
+      {
+        "name": "bronze_scs_geom",
+        "input": "data/raw/ibge/scs/BR_setores_CD2022.gpkg",
+        "output": "bronze_scs_geom",
+        "format": "parquet",
+        "years":[2022]
+      },
+      {
+        "name": "bronze_crimes_cellphones",
+        "input": "data/raw/sspsp/criminality/cellphones/CelularesSubtraidos_{}.xlsx",
+        "output": "bronze_crimes_cellphones",
+        "format": "parquet",
+        "years": [2024,2023,2022,2021,2020,2019,2018,2017]
+      },
+      {
+        "name": "bronze_crimes_vechicles",
+        "input": "data/raw/sspsp/criminality/vehicles/VeiculosSubtraidos_{}.xlsx",
+        "output": "bronze_crimes_vehicles",
+        "format": "parquet",
+        "years": [2024,2023,2022,2021,2020,2019,2018,2017]
+      },
+      {
+        "name": "bronze_crimes_others",
+        "input": "data/raw/sspsp/criminality/other_crimes/SPDadosCriminais_{}.xlsx",
+        "output": "bronze_crimes_others",
+        "format": "parquet",
+        "years": [2024,2023,2022]
+      }
+    ],
+    "silver": [
+      {
+        "name": "silver_scs_demographics",
+        "input": [
+          "bronze_scs_demographics"
+        ],
+        "output": "silver_scs_demographics",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_mun_demographics",
+        "input": [
+          "bronze_scs_demographics"
+        ],
+        "output": "silver_mun_demographics",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_scs_geom",
+        "input": [
+          "bronze_scs_geom"
+        ],
+        "output": "silver_scs_geom",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_mun_geom",
+        "input": [
+          "bronze_scs_geom"
+        ],
+        "output": "silver_mun_geom",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_scs",
+        "input": [
+          "silver_scs_demographics",
+          "silver_scs_geom"
+        ],
+        "output": "silver_scs",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_mun",
+        "input": [
+          "silver_mun_demographics",
+          "silver_mun_geom"
+        ],
+        "output": "silver_mun",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_crimes_cellphones",
+        "input": [
+          "bronze_crimes_cellphones"
+        ],
+        "output": "silver_crimes_cellphones",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_crimes_vehicles",
+        "input": [
+          "bronze_crimes_vehicles"
+        ],
+        "output": "silver_crimes_vehicles",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_crimes_others",
+        "input": [
+          "bronze_crimes_others"
+        ],
+        "output": "silver_crimes_others",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_crimes",
+        "input": [
+          "silver_crimes_cellphones",
+          "silver_crimes_vehicles",
+          "silver_crimes_others"
+        ],
+        "output": "silver_crimes",
+        "format": "geoparquet"
+      }
+    ],
+    "gold": [
+      {
+        "name": "gold_crimes_scs",
+        "input": [
+          "silver_scs",
+          "silver_crimes_cellphones",
+          "silver_crimes_vehicles",
+          "silver_crimes_others"
+        ],
+        "output": "gold_crimes_scs",
+        "format": "geoparquet"
+      },
+      {
+        "name": "gold_crimes_mun",
+        "input": [
+          "silver_mun",
+          "silver_crimes_cellphones",
+          "silver_crimes_vehicles",
+          "silver_crimes_others"
+        ],
+        "output": "gold_crimes_mun",
+        "format": "geoparquet"
+      }
+    ]
+  }
 }
