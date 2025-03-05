@@ -107,7 +107,7 @@
           "bronze_scs_demographics"
         ],
         "output": "silver_scs_demographics",
-        "format": "geoparquet"
+        "format": "parquet"
       },
       {
         "name": "silver_mun_demographics",
@@ -115,7 +115,7 @@
           "bronze_scs_demographics"
         ],
         "output": "silver_mun_demographics",
-        "format": "geoparquet"
+        "format": "parquet"
       },
       {
         "name": "silver_scs_geom",
