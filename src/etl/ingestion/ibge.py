@@ -26,14 +26,10 @@ class IbgeIngestion:
     
     def unzip(self,path)->None:
         try:
-            stage_time = time.time()
             file = [file for file in os.listdir(path) if file.endswith(".zip")][0]
             file_path = os.path.join(path, file)
-            logging.info(f"Unzipping {file}")
             with zipfile.ZipFile(file_path, 'r') as zip_ref:
                 zip_ref.extractall(path)
-            elapsed_time = time.time() - stage_time
-            logging.info(f"{file} unzipped in {elapsed_time}s")
         except Exception as e:
             logging.exception("Error to unzip IBGE file", exc_info=True)
             raise 
@@ -42,7 +38,6 @@ class IbgeIngestion:
         if not ftp_url.endswith('/'):
             ftp_url += '/'
         try:
-            stage_time = time.time()
             # ACCESS FTP
             ftp = FTP(ftp_host)
             ftp.login()
@@ -50,25 +45,26 @@ class IbgeIngestion:
             # CREATE TARGET PATH
             os.makedirs(path, exist_ok=True)
             # DOWNLOAD SPECIFIC FILE
-            logging.info(f"Downloading IBGE data for file {file_name}")
             target_path = os.path.join(path, file_name)
             with open(target_path, 'wb') as f:
                 ftp.retrbinary(f"RETR {file_name}", f.write)
-            elapsed_time = time.time() - stage_time
-            logging.info(f"Data {file_name} downloaded in {elapsed_time}s")
         except Exception as e:
             logging.exception("Error to access IBGE file from FTP folder", exc_info=True)
             raise 
         
     def download_all(self)->None:
-        start_time = time.time()
+        logging.info("###### INGESTION - IBGE")
         config = self.load_json(self.__file_path)
         ibge_config = config["landing_area"]['ibge']
         for dict in ibge_config:
+            start_time = time.time()
             ftp_host, ftp_url, source_format, file_name, path = self.load_config(dict)
+            logging.info(f"###### INGESTION - IBGE - {file_name}")
+
             self.download(ftp_host, ftp_url, file_name, path)
             if source_format != 'zip':
                 continue
             self.unzip(path)
-        elapsed_time = time.time() - start_time
-        logging.info(f"IBGE data downloaded in {elapsed_time}s")
+            
+            elapsed = time.time() - start_time
+            logging.info(f"###### INGESTION - IBGE - {file_name} - DONE IN {elapsed:.2f}s")

@@ -25,9 +25,7 @@ class SSPSPIngestion:
        
     def download(self,url,path)->None:
         try:
-            stage_time = time.time()
             file_name = url.split('/')[-1]
-            logging.info(f"Dowloading criminal data for {file_name}")
             os.makedirs(path, exist_ok=True)
 
             headers = {
@@ -48,23 +46,25 @@ class SSPSPIngestion:
                     for chunk in response.iter_content(chunk_size=8192):
                         if chunk:
                             f.write(chunk)
-                elapsed_time = time.time() - stage_time
-                logging.info(f"Data {file_name} downloaded in {elapsed_time}s")
             else:
-                logging.error(f"Error to download data {response.status_code}")
                 raise
         except Exception as e:
             logging.exception("Error to download data", exc_info=True)
             raise
 
     def download_all(self):
+        logging.info("###### INGESTION - SSPSP")
         start_time = time.time()
         config = self.load_json(self.__file_path)
         sspsp_config = config["landing_area"]['sspsp']
         for dict in sspsp_config:
             years, ref_url, path = self.load_config(dict)
             for year in years:
-                #logging.info(ref_url.format(year))
+                start_time = time.time()
+                file_name = ref_url.format(year).split('/')[-1]
+                logging.info(f"###### INGESTION - SSPSP - {file_name}")
+
                 self.download(ref_url.format(year),path)
-        elapsed_time = time.time() - start_time
-        logging.info(f"SSPSP data downloaded in {elapsed_time}s")
+                
+                elapsed = time.time() - start_time
+                logging.info(f"###### INGESTION - SSPSP - {file_name} - DONE IN {elapsed:.2f}s")

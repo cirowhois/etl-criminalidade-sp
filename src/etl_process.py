@@ -1,40 +1,47 @@
-from etl.transformation.bronze__all_data import AllBronze
-from etl.transformation.silver__geo_demog import IBGESilverPrep,IBGESilverFinal
-from etl.transformation.silver__crimes import SSPSPSilverPrep
+from etl.steps.bronze import AllBronze
+from etl.steps.silver import IBGESilver, SSPSPSilver
+from etl.steps.gold import AllGold
+from utils import sedona
+import logging
+import warnings
 
-# LOAD ETL CLASSES
-bronze = AllBronze
-silver_ibge_prep = IBGESilverPrep
-silver_ibge_final = IBGESilverFinal
-silver_sspsp_prep = SSPSPSilverPrep
-
+warnings.filterwarnings('ignore')
+logging.basicConfig(level=logging.INFO)
 
 # LOAD CONFIG
 config_path = 'config.json'
 
+# LOAD ETL CLASSES
+bronze_processor = AllBronze(config_path,sedona)
+silver_ibge_processor = IBGESilver(sedona)
+silver_sspsp_processor = SSPSPSilver(sedona)
+gold_processor = AllGold(sedona)
 
 
-# BRONZE >> 
-    # FROM RAW TO PARQUET
-    # DATE PROCESS COLUMN
-    # YEAR INFO COLUMN
-#bronze(config_path).all_tables()
+logging.info("################# STARTING ETL PROCESS #################")
 
-# SILVER >>
-    # GEOM COLUMN
-    # FILTER NOT MAPPED ITEMS
-    # SET 4326 SRID
-    # DEDUP INFO
-    # SET SCHEMA FOR IBGE AND SSPSP DATA
-#silver_ibge_prep(config_path).silver_scs_demographics()
-#silver_ibge_prep(config_path).silver_mun_demographics()
-#silver_ibge_prep(config_path).silver_scs_geom()
-#silver_ibge_prep(config_path).silver_mun_geom()
-#
-#silver_ibge_final(config_path).silver_scs()
-#silver_ibge_final(config_path).silver_mun()
+logging.info("######################## BRONZE ########################")
+# BRONZE
+bronze_processor.all_tables()
 
+logging.info("######################## SILVER ########################")
+# SILVER
+silver_ibge_processor.silver_scs_demographics()
+silver_ibge_processor.silver_mun_demographics()
+silver_ibge_processor.silver_scs_geom()
+silver_ibge_processor.silver_mun_geom()
+silver_ibge_processor.silver_scs()
+silver_ibge_processor.silver_mun()
+silver_sspsp_processor.silver_crimes_cellphones()
+silver_sspsp_processor.silver_crimes_vehicles()
+silver_sspsp_processor.silver_crimes_others()
+silver_sspsp_processor.silver_crimes()
 
-silver_sspsp_prep(config_path).silver_crimes_cellphones()
-silver_sspsp_prep(config_path).silver_crimes_vehicles()
-silver_sspsp_prep(config_path).silver_crimes_others()
+logging.info("######################## GOLD ########################")
+# GOLD 
+gold_processor.gold_crimes()
+gold_processor.gold_crimes_scs()
+gold_processor.gold_crimes_mun()
+
+logging.info("################# FINISHED ETL PROCESS #################")
+sedona.stop()
