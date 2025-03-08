@@ -23,7 +23,7 @@
         "ftp_url": "/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Setor_csv/",
         "format": "zip",
         "file_name": "Agregados_por_setores_basico_BR.zip",
-        "raw_path": "data/raw/ibge/sociodemographics"
+        "raw_path": "data/landing_area/ibge/sociodemographics"
       },
       {
         "name": "IBGE - SCs",
@@ -32,201 +32,598 @@
         "ftp_url": "/organizacao_do_territorio/malhas_territoriais/malhas_de_setores_censitarios__divisoes_intramunicipais/censo_2022/setores/gpkg/BR/",
         "format": "gpkg",
         "file_name": "BR_setores_CD2022.gpkg",
-        "raw_path": "data/raw/ibge/scs"
+        "raw_path": "data/landing_area/ibge/scs"
       }
     ],
     "sspsp": [
       {
         "name": "Criminality - Cellphones",
         "type": "url",
-        "years": [
-          2024,
-          2023,
-          2022,
-          2021,
-          2020,
-          2019,
-          2018,
-          2017
-        ],
+        "years": [2024,2023,2022,2021,2020,2019,2018,2017],
         "url": "https://www.ssp.sp.gov.br/assets/estatistica/transparencia/baseDados/celularesSub/CelularesSubtraidos_{}.xlsx",
         "format": "xlsx",
-        "raw_path": "data/raw/criminality/cellphones"
+        "raw_path": "data/landing_area/sspsp/criminality/cellphones"
       },
       {
         "name": "Criminality - Vehicles",
         "type": "url",
-        "years": [
-          2024,
-          2023,
-          2022,
-          2021,
-          2020,
-          2019,
-          2018,
-          2017
-        ],
+        "years": [2024,2023,2022,2021,2020,2019,2018,2017],
         "url": "https://www.ssp.sp.gov.br/assets/estatistica/transparencia/baseDados/veiculosSub/VeiculosSubtraidos_{}.xlsx",
         "format": "xlsx",
-        "raw_path": "data/raw/criminality/vehicles"
+        "raw_path": "data/landing_area/sspsp/criminality/vehicles"
       },
       {
         "name": "Criminality - Other Crimes",
         "type": "url",
-        "years": [
-          2024,
-          2023,
-          2022
-        ],
+        "years": [2024,2023,2022],
         "url": "https://www.ssp.sp.gov.br/assets/estatistica/transparencia/spDados/SPDadosCriminais_{}.xlsx",
         "format": "xlsx",
-        "raw_path": "data/raw/criminality/other_crimes"
+        "raw_path": "data/landing_area/sspsp/criminality/other_crimes"
       }
     ]
   },
-  "data_lake": [
-    {
-      "bronze": [
-        {
-          "name": "bronze_scs_demographics",
-          "input": "data/raw/ibge/sociodemographics",
-          "output": "bronze_scs_demographics",
-          "format": "parquet"
-        },
-        {
-          "name": "bronze_scs_geom",
-          "input": "data/raw/ibge/scs",
-          "output": "bronze_scs_geom",
-          "format": "parquet"
-        },
-        {
-          "name": "bronze_crimes_cellphones",
-          "input": "data/raw/sspsp/criminality/cellphones",
-          "output": "bronze_crimes_cellphones",
-          "format": "parquet"
-        },
-        {
-          "name": "bronze_crimes_vechicles",
-          "input": "data/raw/sspsp/criminality/vehicles",
-          "output": "bronze_crimes_vehicles"
-        },
-        {
-          "name": "bronze_crimes_others",
-          "input": "data/raw/sspsp/criminality/other_crimes",
-          "output": "bronze_crimes_others",
-          "format": "parquet"
-        }
+  "data_lake": {
+    "bronze": [
+      {
+        "name": "bronze_scs_demographics",
+        "input": "data/landing_area/ibge/sociodemographics/Agregados_por_setores_basico_BR.csv",
+        "output": "bronze_scs_demographics",
+        "format": "parquet",
+        "years": [2022]
+      },
+      {
+        "name": "bronze_scs_geom",
+        "input": "data/landing_area/ibge/scs/BR_setores_CD2022.gpkg",
+        "output": "bronze_scs_geom",
+        "format": "parquet",
+        "years": [2022]
+      },
+      {
+        "name": "bronze_crimes_cellphones",
+        "input": "data/landing_area/sspsp/criminality/cellphones/CelularesSubtraidos_{}.xlsx",
+        "output": "bronze_crimes_cellphones",
+        "format": "parquet",
+        "years": [2024,2023,2022,2021,2020,2019,2018,2017]
+      },
+      {
+        "name": "bronze_crimes_vechicles",
+        "input": "data/landing_area/sspsp/criminality/vehicles/VeiculosSubtraidos_{}.xlsx",
+        "output": "bronze_crimes_vehicles",
+        "format": "parquet",
+        "years": [2024,2023,2022,2021,2020,2019,2018,2017]
+      },
+      {
+        "name": "bronze_crimes_others",
+        "input": "data/landing_area/sspsp/criminality/other_crimes/SPDadosCriminais_{}.xlsx",
+        "output": "bronze_crimes_others",
+        "format": "parquet",
+        "years": [2024,2023,2022]
+      }
+    ],
+    "silver": [
+      {
+        "name": "silver_scs_demographics",
+        "input": ["bronze_scs_demographics"],
+        "output": "silver_scs_demographics",
+        "format": "parquet"
+      },
+      {
+        "name": "silver_mun_demographics",
+        "input": ["bronze_scs_demographics"],
+        "output": "silver_mun_demographics",
+        "format": "parquet"
+      },
+      {
+        "name": "silver_scs_geom",
+        "input": ["bronze_scs_geom"],
+        "output": "silver_scs_geom",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_mun_geom",
+        "input": ["bronze_scs_geom"],
+        "output": "silver_mun_geom",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_scs",
+        "input": ["silver_scs_demographics","silver_scs_geom"],
+        "output": "silver_scs",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_mun",
+        "input": ["silver_mun_demographics","silver_mun_geom"],
+        "output": "silver_mun",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_crimes_cellphones",
+        "input": ["bronze_crimes_cellphones"],
+        "output": "silver_crimes_cellphones",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_crimes_vehicles",
+        "input": ["bronze_crimes_vehicles"],
+        "output": "silver_crimes_vehicles",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_crimes_others",
+        "input": ["bronze_crimes_others"],
+        "output": "silver_crimes_others",
+        "format": "geoparquet"
+      },
+      {
+        "name": "silver_crimes",
+        "input": ["silver_crimes_cellphones","silver_crimes_vehicles","silver_crimes_others"],
+        "output": "silver_crimes",
+        "format": "geoparquet"
+      }
+    ],
+    "gold": [
+      {
+        "name": "gold_crimes",
+        "input": ["silver_mun_geom","silver_crimes"],
+        "output": "gold_crimes",
+        "format": "geoparquet"
+      },
+      {
+        "name": "gold_crimes_scs",
+        "input": ["silver_scs","silver_crimes"],
+        "output": "gold_crimes_scs",
+        "format": "geoparquet"
+      },
+      {
+        "name": "gold_crimes_mun",
+        "input": ["silver_mun","silver_crimes"],
+        "output": "gold_crimes_mun",
+        "format": "geoparquet"
+      }
+    ]
+  },
+  "tests": {
+    "bronze_scs_demographics": {
+      "schema": [
+        {"name": "ID", "type": "string"},
+        {"name": "CD_SETOR", "type": "string"},
+        {"name": "SITUACAO", "type": "string"},
+        {"name": "CD_SIT", "type": "string"},
+        {"name": "CD_TIPO", "type": "string"},
+        {"name": "AREA_KM2", "type": "string"},
+        {"name": "CD_REGIAO", "type": "string"},
+        {"name": "NM_REGIAO", "type": "string"},
+        {"name": "CD_UF", "type": "string"},
+        {"name": "NM_UF", "type": "string"},
+        {"name": "CD_MUN", "type": "string"},
+        {"name": "NM_MUN", "type": "string"},
+        {"name": "CD_DIST", "type": "string"},
+        {"name": "NM_DIST", "type": "string"},
+        {"name": "CD_SUBDIST", "type": "string"},
+        {"name": "NM_SUBDIST", "type": "string"},
+        {"name": "CD_BAIRRO", "type": "string"},
+        {"name": "NM_BAIRRO", "type": "string"},
+        {"name": "CD_NU", "type": "string"},
+        {"name": "NM_NU", "type": "string"},
+        {"name": "CD_FCU", "type": "string"},
+        {"name": "NM_FCU", "type": "string"},
+        {"name": "CD_AGLOM", "type": "string"},
+        {"name": "NM_AGLOM", "type": "string"},
+        {"name": "CD_RGINT", "type": "string"},
+        {"name": "NM_RGINT", "type": "string"},
+        {"name": "CD_RGI", "type": "string"},
+        {"name": "NM_RGI", "type": "string"},
+        {"name": "CD_CONCURB", "type": "string"},
+        {"name": "NM_CONCURB", "type": "string"},
+        {"name": "v0001", "type": "string"},
+        {"name": "v0002", "type": "string"},
+        {"name": "v0003", "type": "string"},
+        {"name": "v0004", "type": "string"},
+        {"name": "v0005", "type": "string"},
+        {"name": "v0006", "type": "string"},
+        {"name": "v0007", "type": "string"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "YEAR_INFO", "type": "integer"}
       ],
-      "silver": [
-        {
-          "name": "silver_scs_demographics",
-          "input": [
-            "bronze_scs_demographics"
-          ],
-          "output": "silver_scs_demographics",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_mun_demographics",
-          "input": [
-            "bronze_scs_demographics"
-          ],
-          "output": "silver_mun_demographics",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_scs_geom",
-          "input": [
-            "bronze_scs_geom"
-          ],
-          "output": "silver_scs_geom",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_mun_geom",
-          "input": [
-            "bronze_scs_geom"
-          ],
-          "output": "silver_mun_geom",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_scs",
-          "input": [
-            "silver_scs_demographics",
-            "silver_scs_geom"
-          ],
-          "output": "silver_scs",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_mun",
-          "input": [
-            "silver_mun_demographics",
-            "silver_mun_geom"
-          ],
-          "output": "silver_mun",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_crimes_cellphones",
-          "input": [
-            "bronze_crimes_cellphones"
-          ],
-          "output": "silver_crimes_cellphones",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_crimes_vehicles",
-          "input": [
-            "bronze_crimes_vehicles"
-          ],
-          "output": "silver_crimes_vehicles",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_crimes_others",
-          "input": [
-            "bronze_crimes_others"
-          ],
-          "output": "silver_crimes_others",
-          "format": "geoparquet"
-        },
-        {
-          "name": "silver_crimes",
-          "input": [
-            "silver_crimes_cellphones",
-            "silver_crimes_vehicles",
-            "silver_crimes_others"
-          ],
-          "output": "silver_crimes",
-          "format": "geoparquet"
-        }
+      "primary_key": "CD_SETOR",
+      "not_null": ["CD_SETOR"]
+    },
+    "bronze_scs_geom": {
+      "schema": [
+        {"name": "ID", "type": "string"},
+        {"name": "geom", "type": "geometry"},
+        {"name": "CD_SETOR", "type": "string"},
+        {"name": "SITUACAO", "type": "string"},
+        {"name": "CD_SIT", "type": "string"},
+        {"name": "CD_TIPO", "type": "string"},
+        {"name": "AREA_KM2", "type": "double"},
+        {"name": "CD_REGIAO", "type": "string"},
+        {"name": "NM_REGIAO", "type": "string"},
+        {"name": "CD_UF", "type": "string"},
+        {"name": "NM_UF", "type": "string"},
+        {"name": "CD_MUN", "type": "string"},
+        {"name": "NM_MUN", "type": "string"},
+        {"name": "CD_DIST", "type": "string"},
+        {"name": "NM_DIST", "type": "string"},
+        {"name": "CD_SUBDIST", "type": "string"},
+        {"name": "NM_SUBDIST", "type": "string"},
+        {"name": "CD_BAIRRO", "type": "string"},
+        {"name": "NM_BAIRRO", "type": "string"},
+        {"name": "CD_NU", "type": "string"},
+        {"name": "NM_NU", "type": "string"},
+        {"name": "CD_FCU", "type": "string"},
+        {"name": "NM_FCU", "type": "string"},
+        {"name": "CD_AGLOM", "type": "string"},
+        {"name": "NM_AGLOM", "type": "string"},
+        {"name": "CD_RGINT", "type": "string"},
+        {"name": "NM_RGINT", "type": "string"},
+        {"name": "CD_RGI", "type": "string"},
+        {"name": "NM_RGI", "type": "string"},
+        {"name": "CD_CONCURB", "type": "string"},
+        {"name": "NM_CONCURB", "type": "string"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "YEAR_INFO", "type": "integer"}
       ],
-      "gold": [
-        {
-          "name": "gold_crimes_scs",
-          "input": [
-            "silver_scs",
-            "silver_crimes_cellphones",
-            "silver_crimes_vehicles",
-            "silver_crimes_others"
-          ],
-          "output": "gold_crimes_scs",
-          "format": "geoparquet"
-        },
-        {
-          "name": "gold_crimes_mun",
-          "input": [
-            "silver_mun",
-            "silver_crimes_cellphones",
-            "silver_crimes_vehicles",
-            "silver_crimes_others"
-          ],
-          "output": "gold_crimes_mun",
-          "format": "geoparquet"
-        }
-      ]
+      "primary_key": "CD_SETOR",
+      "not_null": ["CD_SETOR"]
+    },
+    "bronze_crimes_cellphones": {
+      "schema": [
+        {"name": "ID", "type": "string"},
+        {"name": "ID_DELEGACIA", "type": "string"},
+        {"name": "NOME_DEPARTAMENTO", "type": "string"},
+        {"name": "NOME_SECCIONAL", "type": "string"},
+        {"name": "NOME_DELEGACIA", "type": "string"},
+        {"name": "NOME_MUNICIPIO", "type": "string"},
+        {"name": "ANO_BO", "type": "string"},
+        {"name": "NUM_BO", "type": "string"},
+        {"name": "NOME_DEPARTAMENTO_CIRC", "type": "string"},
+        {"name": "NOME_SECCIONAL_CIRC", "type": "string"},
+        {"name": "NOME_DELEGACIA_CIRC", "type": "string"},
+        {"name": "NOME_MUNICIPIO_CIRC", "type": "string"},
+        {"name": "DATA_OCORRENCIA_BO", "type": "string"},
+        {"name": "HORA_OCORRENCIA", "type": "string"},
+        {"name": "DESCRICAO_APRESENTACAO", "type": "string"},
+        {"name": "DATAHORA_REGISTRO_BO", "type": "string"},
+        {"name": "DATA_COMUNICACAO_BO", "type": "string"},
+        {"name": "DATAHORA_IMPRESSAO_BO", "type": "string"},
+        {"name": "DESCR_PERIODO", "type": "string"},
+        {"name": "AUTORIA_BO", "type": "string"},
+        {"name": "FLAG_INTOLERANCIA", "type": "string"},
+        {"name": "TIPO_INTOLERANCIA", "type": "string"},
+        {"name": "FLAG_FLAGRANTE", "type": "string"},
+        {"name": "FLAG_STATUS", "type": "string"},
+        {"name": "DESC_LEI", "type": "string"},
+        {"name": "RUBRICA", "type": "string"},
+        {"name": "DESCR_CONDUTA", "type": "string"},
+        {"name": "DESDOBRAMENTO", "type": "string"},
+        {"name": "CIRCUNSTANCIA", "type": "string"},
+        {"name": "DESCR_TIPOLOCAL", "type": "string"},
+        {"name": "DESCR_SUBTIPOLOCAL", "type": "string"},
+        {"name": "CIDADE", "type": "string"},
+        {"name": "BAIRRO", "type": "string"},
+        {"name": "CEP", "type": "string"},
+        {"name": "LOGRADOURO", "type": "string"},
+        {"name": "NUMERO_LOGRADOURO", "type": "string"},
+        {"name": "LATITUDE", "type": "string"},
+        {"name": "LONGITUDE", "type": "string"},
+        {"name": "CONT_OBJETO", "type": "string"},
+        {"name": "DESCR_MODO_OBJETO", "type": "string"},
+        {"name": "DESCR_TIPO_OBJETO", "type": "string"},
+        {"name": "DESCR_SUBTIPO_OBJETO", "type": "string"},
+        {"name": "DESCR_UNIDADE", "type": "string"},
+        {"name": "QUANTIDADE_OBJETO", "type": "string"},
+        {"name": "MARCA_OBJETO", "type": "string"},
+        {"name": "MES", "type": "string"},
+        {"name": "ANO", "type": "string"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "YEAR_INFO", "type": "integer"}
+      ],
+      "primary_key": "ID",
+      "not_null": ["ID"]
+    },
+    "bronze_crimes_vehicles": {
+      "schema": [
+        {"name": "ID", "type": "string"},
+        {"name": "ID_DELEGACIA", "type": "string"},
+        {"name": "NOME_DEPARTAMENTO", "type": "string"},
+        {"name": "NOME_SECCIONAL", "type": "string"},
+        {"name": "NOME_DELEGACIA", "type": "string"},
+        {"name": "NOME_MUNICIPIO", "type": "string"},
+        {"name": "ANO_BO", "type": "string"},
+        {"name": "NUM_BO", "type": "string"},
+        {"name": "NOME_DEPARTAMENTO_CIRC", "type": "string"},
+        {"name": "NOME_SECCIONAL_CIRC", "type": "string"},
+        {"name": "NOME_DELEGACIA_CIRC", "type": "string"},
+        {"name": "NOME_MUNICIPIO_CIRC", "type": "string"},
+        {"name": "DATA_OCORRENCIA_BO", "type": "string"},
+        {"name": "HORA_OCORRENCIA_BO", "type": "string"},
+        {"name": "DESCRICAO_APRESENTACAO", "type": "string"},
+        {"name": "DATAHORA_REGISTRO_BO", "type": "string"},
+        {"name": "DATA_COMUNICACAO_BO", "type": "string"},
+        {"name": "DATAHORA_IMPRESSAO_BO", "type": "string"},
+        {"name": "DESCR_PERIODO", "type": "string"},
+        {"name": "AUTORIA_BO", "type": "string"},
+        {"name": "FLAG_INTOLERANCIA", "type": "string"},
+        {"name": "TIPO_INTOLERANCIA", "type": "string"},
+        {"name": "FLAG_FLAGRANTE", "type": "string"},
+        {"name": "FLAG_STATUS", "type": "string"},
+        {"name": "DESCR_ESPECIE", "type": "string"},
+        {"name": "DESCR_SUBESPECIE", "type": "string"},
+        {"name": "RUBRICA", "type": "string"},
+        {"name": "DESCR_CONDUTA", "type": "string"},
+        {"name": "DESDOBRAMENTO", "type": "string"},
+        {"name": "CIRCUNSTANCIA", "type": "string"},
+        {"name": "DESCR_TIPOLOCAL", "type": "string"},
+        {"name": "DESCR_SUBTIPOLOCAL", "type": "string"},
+        {"name": "CIDADE", "type": "string"},
+        {"name": "BAIRRO", "type": "string"},
+        {"name": "CEP", "type": "string"},
+        {"name": "LOGRADOURO", "type": "string"},
+        {"name": "NUMERO_LOGRADOURO", "type": "string"},
+        {"name": "LATITUDE", "type": "string"},
+        {"name": "LONGITUDE", "type": "string"},
+        {"name": "CONT_VEICULO", "type": "string"},
+        {"name": "DESCR_OCORRENCIA_VEICULO", "type": "string"},
+        {"name": "DESCR_TIPO_VEICULO", "type": "string"},
+        {"name": "DESCR_MARCA_VEICULO", "type": "string"},
+        {"name": "ANO_FABRICACAO", "type": "string"},
+        {"name": "ANO_MODELO", "type": "string"},
+        {"name": "PLACA_VEICULO", "type": "string"},
+        {"name": "DESC_COR_VEICULO", "type": "string"},
+        {"name": "MES", "type": "string"},
+        {"name": "ANO", "type": "string"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "YEAR_INFO", "type": "integer"}
+      ],
+      "primary_key": "ID",
+      "not_null": ["ID"]
+    },
+    "bronze_crimes_others": {
+      "schema": [
+        {"name": "ID", "type": "string"},
+        {"name": "NOME_DEPARTAMENTO", "type": "string"},
+        {"name": "NOME_SECCIONAL", "type": "string"},
+        {"name": "NOME_DELEGACIA", "type": "string"},
+        {"name": "CIDADE", "type": "string"},
+        {"name": "NUM_BO", "type": "string"},
+        {"name": "ANO_BO", "type": "string"},
+        {"name": "DATA_COMUNICACAO_BO", "type": "string"},
+        {"name": "DATA_OCORRENCIA_BO", "type": "string"},
+        {"name": "HORA_OCORRENCIA_BO", "type": "string"},
+        {"name": "DESCR_PERIODO", "type": "string"},
+        {"name": "DESCR_TIPOLOCAL", "type": "string"},
+        {"name": "BAIRRO", "type": "string"},
+        {"name": "LOGRADOURO", "type": "string"},
+        {"name": "NUMERO_LOGRADOURO", "type": "string"},
+        {"name": "LATITUDE", "type": "string"},
+        {"name": "LONGITUDE", "type": "string"},
+        {"name": "NOME_DELEGACIA_CIRCUNSCRIÇÃO", "type": "string"},
+        {"name": "NOME_DEPARTAMENTO_CIRCUNSCRIÇÃO", "type": "string"},
+        {"name": "NOME_SECCIONAL_CIRCUNSCRIÇÃO", "type": "string"},
+        {"name": "NOME_MUNICIPIO_CIRCUNSCRIÇÃO", "type": "string"},
+        {"name": "RUBRICA", "type": "string"},
+        {"name": "DESCR_CONDUTA", "type": "string"},
+        {"name": "NATUREZA_APURADA", "type": "string"},
+        {"name": "MES_ESTATISTICA", "type": "string"},
+        {"name": "ANO_ESTATISTICA", "type": "string"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "YEAR_INFO", "type": "integer"}
+      ],
+      "primary_key": "ID",
+      "not_null": ["ID"]
+    },
+    "silver_scs_demographics": {
+      "schema": [
+        {"name": "ID_SC", "type": "string"},
+        {"name": "POP_TOTAL", "type": "string"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "YEAR_INFO", "type": "integer"}
+      ],
+      "primary_key": "ID_SC",
+      "not_null": ["ID_SC"]
+    },
+    "silver_scs_geom": {
+      "schema": [
+        {"name": "ID_SC", "type": "string"},
+        {"name": "MUN", "type": "string"},
+        {"name": "STATE", "type": "string"},
+        {"name": "AREA_KM2", "type": "double"},
+        {"name": "geom", "type": "geometry"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "YEAR_INFO", "type": "integer"},
+        {"name": "ID_MUN", "type": "integer"}
+      ],
+      "primary_key": "ID_SC",
+      "not_null": ["ID_SC","geom"]
+    },
+    "silver_mun_demographics": {
+      "schema": [
+        {"name": "ID_MUN", "type": "string"},
+        {"name": "POP_TOTAL", "type": "integer"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "YEAR_INFO", "type": "integer"}
+      ],
+      "primary_key": "ID_MUN",
+      "not_null": ["ID_MUN"]
+    },
+    "silver_mun_geom": {
+      "schema": [
+        {"name": "MUN", "type": "string"},
+        {"name": "STATE", "type": "string"},
+        {"name": "AREA_KM2", "type": "double"},
+        {"name": "geom", "type": "geometry"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "YEAR_INFO", "type": "integer"},
+        {"name": "ID_MUN", "type": "integer"}
+      ],
+      "primary_key": "ID_MUN",
+      "not_null": ["ID_MUN","geom"]
+    },
+    "silver_crimes_cellphones": {
+      "schema": [
+        {"name": "ID", "type": "integer"},
+        {"name": "CRIMINAL_TYPE", "type": "string"},
+        {"name": "ADDRESS", "type": "string"},
+        {"name": "ADDRESS_NUMBER", "type": "string"},
+        {"name": "NEIGHBORHOOD", "type": "string"},
+        {"name": "DAY_INFO", "type": "integer"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "geom", "type": "geometry"},
+        {"name": "YEAR_INFO", "type": "integer"},
+        {"name": "MONTH_INFO", "type": "integer"}
+      ],
+      "primary_key": "ID",
+      "not_null": ["ID","geom"]
+    },
+    "silver_crimes_vehicles": {
+      "schema": [
+        {"name": "ID", "type": "integer"},
+        {"name": "CRIMINAL_TYPE", "type": "string"},
+        {"name": "ADDRESS", "type": "string"},
+        {"name": "ADDRESS_NUMBER", "type": "string"},
+        {"name": "NEIGHBORHOOD", "type": "string"},
+        {"name": "DAY_INFO", "type": "integer"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "geom", "type": "geometry"},
+        {"name": "YEAR_INFO", "type": "integer"},
+        {"name": "MONTH_INFO", "type": "integer"}
+      ],
+      "primary_key": "ID",
+      "not_null": ["ID","geom"]
+    },
+    "silver_crimes_others": {
+      "schema": [
+        {"name": "ID", "type": "integer"},
+        {"name": "CRIMINAL_TYPE", "type": "string"},
+        {"name": "ADDRESS", "type": "string"},
+        {"name": "ADDRESS_NUMBER", "type": "string"},
+        {"name": "NEIGHBORHOOD", "type": "string"},
+        {"name": "DAY_INFO", "type": "integer"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "geom", "type": "geometry"},
+        {"name": "YEAR_INFO", "type": "integer"},
+        {"name": "MONTH_INFO", "type": "integer"}
+      ],
+      "primary_key": "ID",
+      "not_null": ["ID","geom"]
+    },
+    "silver_scs": {
+      "schema": [
+        {"name": "ID_SC", "type": "string"},
+        {"name": "MUN", "type": "string"},
+        {"name": "STATE", "type": "string"},
+        {"name": "AREA_KM2", "type": "double"},
+        {"name": "geom", "type": "geometry"},
+        {"name": "POP_TOTAL", "type": "string"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "YEAR_INFO", "type": "integer"},
+        {"name": "ID_MUN", "type": "integer"}
+      ],
+      "primary_key": "ID_SC",
+      "not_null": ["ID_SC","geom"]
+    },
+    "silver_mun": {
+      "schema": [
+        {"name": "MUN", "type": "string"},
+        {"name": "STATE", "type": "string"},
+        {"name": "AREA_KM2", "type": "double"},
+        {"name": "geom", "type": "geometry"},
+        {"name": "POP_TOTAL", "type": "integer"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "YEAR_INFO", "type": "integer"},
+        {"name": "ID_MUN", "type": "integer"}
+      ],
+      "primary_key": "ID_MUN",
+      "not_null": ["ID_MUN","geom"]
+    },
+    "silver_crimes": {
+      "schema": [
+        {"name": "ID_CRIME", "type": "string"},
+        {"name": "CRIMINAL_CLASS", "type": "string"},
+        {"name": "CRIMINAL_TYPE", "type": "string"},
+        {"name": "ADDRESS", "type": "string"},
+        {"name": "ADDRESS_NUMBER", "type": "string"},
+        {"name": "NEIGHBORHOOD", "type": "string"},
+        {"name": "DAY_INFO", "type": "integer"},
+        {"name": "MONTH_INFO", "type": "integer"},
+        {"name": "ID_SC", "type": "string"},
+        {"name": "ID_MUN", "type": "integer"},
+        {"name": "MUN", "type": "string"},
+        {"name": "STATE", "type": "string"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "geom", "type": "geometry"},
+        {"name": "CRIMINAL_CLASS_TREATED", "type": "string"},
+        {"name": "CRIMINAL_TYPE_TREATED", "type": "string"},
+        {"name": "YEAR_INFO", "type": "integer"}
+      ],
+      "primary_key": "ID_CRIME",
+      "not_null": ["ID_CRIME","CRIMINAL_TYPE","geom"]
+    },
+    "gold_crimes": {
+      "schema": [
+        {"name": "ID_CRIME", "type": "string"},
+        {"name": "CRIMINAL_CLASS", "type": "string"},
+        {"name": "CRIMINAL_TYPE", "type": "string"},
+        {"name": "ADDRESS", "type": "string"},
+        {"name": "ADDRESS_NUMBER", "type": "string"},
+        {"name": "NEIGHBORHOOD", "type": "string"},
+        {"name": "DAY_INFO", "type": "integer"},
+        {"name": "MONTH_INFO", "type": "integer"},
+        {"name": "MUN", "type": "string"},
+        {"name": "STATE", "type": "string"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "geom", "type": "geometry"},
+        {"name": "YEAR_INFO", "type": "integer"}
+      ],
+      "primary_key": "ID_CRIME",
+      "not_null": ["ID_CRIME","CRIMINAL_TYPE","geom"]
+    },
+    "gold_crimes_mun": {
+      "schema": [
+        {"name": "ID_MUN", "type": "integer"},
+        {"name": "MUN", "type": "string"},
+        {"name": "STATE", "type": "string"},
+        {"name": "AREA_KM2", "type": "double"},
+        {"name": "geom", "type": "geometry"},
+        {"name": "POP_TOTAL", "type": "integer"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "TOTAL_CRIMES", "type": "long"},
+        {"name": "ARMAS", "type": "long"},
+        {"name": "DROGAS", "type": "long"},
+        {"name": "HOMICÍDIO", "type": "long"},
+        {"name": "LESAO_CORPORAL", "type": "long"},
+        {"name": "ROUBO_E_FURTO", "type": "long"},
+        {"name": "SEQUESTRO", "type": "long"},
+        {"name": "TOTAL_CRIME_INDEX", "type": "double"},
+        {"name": "YEAR_INFO", "type": "integer"}
+      ],
+      "primary_key": "ID_MUN",
+      "not_null": ["ID_MUN","geom"]
+    },
+    "gold_crimes_scs": {
+      "schema": [
+        {"name": "ID_SC", "type": "string"},
+        {"name": "MUN", "type": "string"},
+        {"name": "STATE", "type": "string"},
+        {"name": "AREA_KM2", "type": "double"},
+        {"name": "geom", "type": "geometry"},
+        {"name": "POP_TOTAL", "type": "string"},
+        {"name": "DATE_PROCESSED", "type": "date"},
+        {"name": "ID_MUN", "type": "integer"},
+        {"name": "TOTAL_CRIMES", "type": "long"},
+        {"name": "ARMAS", "type": "long"},
+        {"name": "DROGAS", "type": "long"},
+        {"name": "HOMICÍDIO", "type": "long"},
+        {"name": "LESAO_CORPORAL", "type": "long"},
+        {"name": "ROUBO_E_FURTO", "type": "long"},
+        {"name": "SEQUESTRO", "type": "long"},
+        {"name": "TOTAL_CRIME_INDEX", "type": "double"},
+        {"name": "YEAR_INFO", "type": "integer"}
+      ],
+      "primary_key": "ID_SC",
+      "not_null": ["ID_SC","geom"]
     }
-  ]
+  }  
 }

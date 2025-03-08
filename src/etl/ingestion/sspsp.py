@@ -1,8 +1,8 @@
 import requests
 import logging
 import os
-import pandas as pd
 import json
+import time
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
@@ -18,16 +18,14 @@ class SSPSPIngestion:
             return json.load(file)
 
     def load_config(self,json):
-        name = json['name']
         years = json['years']
         ref_url = json['url']
         path = json['raw_path']
-        return name, years, ref_url, path
+        return years, ref_url, path
        
     def download(self,url,path)->None:
         try:
             file_name = url.split('/')[-1]
-            logging.info(f"Dowloading criminal data for {file_name}")
             os.makedirs(path, exist_ok=True)
 
             headers = {
@@ -48,20 +46,25 @@ class SSPSPIngestion:
                     for chunk in response.iter_content(chunk_size=8192):
                         if chunk:
                             f.write(chunk)
-                logging.info(f"Data {file_name} downloaded")
             else:
-                logging.error(f"Error to download data {response.status_code}")
                 raise
         except Exception as e:
             logging.exception("Error to download data", exc_info=True)
             raise
 
     def download_all(self):
+        logging.info("###### INGESTION - SSPSP")
+        start_time = time.time()
         config = self.load_json(self.__file_path)
         sspsp_config = config["landing_area"]['sspsp']
         for dict in sspsp_config:
-            name, years, ref_url, path = self.load_config(dict)
-            logging.info(f"Downloading SSPSP data for {name}")
+            years, ref_url, path = self.load_config(dict)
             for year in years:
-                #logging.info(ref_url.format(year))
+                start_time = time.time()
+                file_name = ref_url.format(year).split('/')[-1]
+                logging.info(f"###### INGESTION - SSPSP - {file_name}")
+
                 self.download(ref_url.format(year),path)
+                
+                elapsed = time.time() - start_time
+                logging.info(f"###### INGESTION - SSPSP - {file_name} - DONE IN {elapsed:.2f}s")
