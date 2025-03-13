@@ -1,24 +1,26 @@
 import os
-import logging
+import shutil
 import fiona
 import pyspark.sql.functions as f
 import pyspark.pandas as ps
 import pandas as pd
-import time
 import warnings
 import json
 from sedona.spark import *
 from pyspark.sql.types import NullType
+from utils import log_time, log_subsection, run_tests
 
 
 warnings.filterwarnings('ignore')
-logging.basicConfig(level=logging.INFO)
 
-class AllBronze:
-    def __init__(self,config_path,sedona):
+step = "BRONZE"
+
+class BronzeStep:
+    def __init__(self,config_path,sedona,logger):
         self.sedona = sedona
         config = self.load_json(config_path)
         self.bronze_config = self.load_config(config)
+        self.logger = logger
 
     def load_json(self,config_path):
         with open(config_path, 'r') as file:
@@ -34,84 +36,82 @@ class AllBronze:
     def gpkg_layer(self,file):
         return fiona.listlayers(file)[0]
 
+    # READ
+    @log_time
     def read_data(self, file, year):
-        try:
-            if file.endswith('.csv'):
-                data = self.sedona.read.csv(file, sep=';', encoding='Windows-1252', header=True, inferSchema=False)
-            elif file.endswith('.gpkg'):
-                layer = self.gpkg_layer(file)
-                data = self.sedona.read.format("geopackage").option("tableName", layer).load(file)
-            elif file.endswith('.xlsx'):
-                sheets = self.list_sheets(file, year)
-                df_list = []
-                for sheet in sheets:
-                    df = ps.read_excel(file.format(year), sheet_name=sheet, dtype=str)
-                    df_list.append(df)
-                data = ps.concat(df_list, ignore_index=True) if len(df_list) > 1 else df_list[0]
-                data = data.to_spark()
-            else:
-                raise ValueError("Unsupported file format")
-            return data
-        except Exception as e:
-            logging.exception("Error accessing raw data", exc_info=True)
-            raise
-
+        if file.endswith('.csv'):
+            data = self.sedona.read.csv(file, sep=';', encoding='Windows-1252', header=True, inferSchema=False)
+        elif file.endswith('.gpkg'):
+            layer = self.gpkg_layer(file)
+            data = self.sedona.read.format("geopackage").option("tableName", layer).load(file)
+        elif file.endswith('.xlsx'):
+            sheets = self.list_sheets(file, year)
+            df_list = []
+            for sheet in sheets:
+                df = ps.read_excel(file.format(year), sheet_name=sheet, dtype=str)
+                df_list.append(df)
+            data = ps.concat(df_list, ignore_index=True) if len(df_list) > 1 else df_list[0]
+            data = data.to_spark()
+        else:
+            raise 
+        return data
+    
+    # TREATMENTS
     def treat_columns(self, data):
-        try:
-            # REMOVE DUPLICATED COLUMNS
-            valid_columns = [field.name for field in data.schema.fields if not field.name.endswith(tuple(f".{i}" for i in range(1, 10)))]
-            data = data.select(valid_columns)
-            # REMOVE NULL COLUMNS
-            valid_columns = [field.name for field in data.schema.fields if not isinstance(field.dataType, NullType)]
-            data = data.select(valid_columns)
-            data = data.withColumn("ID",f.sha(f.concat(*[f.coalesce(f.col(c).cast('string'), f.lit('x')) for c in data.columns])))
-            return data
-        except Exception as e:
-            logging.exception("Error treating columns", exc_info=True)
-            raise
-    
-    def treat_data(self,data,year):
-        try:
-            data = data.withColumn("DATE_PROCESSED",f.current_date()) \
-                       .withColumn("YEAR_INFO", f.lit(year)) \
-                       .distinct()
-            return data
-        except Exception as e:
-            logging.exception("Error to add ref column", exc_info=True)
-            raise
-    
-    def write_data(self, data, output_path, file_format):
-        try:
-            data.write.partitionBy("YEAR_INFO")\
-                .option("maxRecordsPerFile", 100000)\
-                .mode('overwrite')\
-                .format(file_format)\
-                .parquet(output_path)
-        except Exception as e:
-            logging.exception("Error writing data", exc_info=True)
-            raise
+        # REMOVE DUPLICATED COLUMNS
+        valid_columns = [field.name for field in data.schema.fields if not field.name.endswith(tuple(f".{i}" for i in range(1, 10)))]
+        data = data.select(valid_columns)
+        # REMOVE NULL COLUMNS
+        valid_columns = [field.name for field in data.schema.fields if not isinstance(field.dataType, NullType)]
+        data = data.select(valid_columns)
+        data = data.withColumn("ID",f.sha2(f.concat_ws("|",*[f.coalesce(f.col(c).cast('string'), f.lit('x')) for c in data.columns]),256))
+        return data
 
-    def all_tables(self):
+    @log_time
+    def treat_data(self,data,year):
+        data = self.treat_columns(data)
+        data = data.withColumn("DATE_PROCESSED",f.current_date()) \
+                   .withColumn("YEAR_INFO", f.lit(year)) \
+                   .distinct()
+        return data
+
+    # WRITE
+    @log_time
+    def write_data(self, data, output_path, file_format)->None:
+        data.write.partitionBy("YEAR_INFO")\
+            .option("maxRecordsPerFile", 100000)\
+            .mode('append')\
+            .format(file_format)\
+            .parquet(output_path)
+        
+    # TESTS
+    @log_time
+    def test_data(self, output, unique_columns, not_null_columns)->None:
+        data = self.sedona.read.parquet(output)
+        run_tests(data, self.logger, unique_columns, not_null_columns)
+
+    # BRONZE EXECUTOR
+    @log_time
+    def tables(self):
         output_prefix = 'data/bronze'
+        if os.path.exists(output_prefix):
+            shutil.rmtree(output_prefix)
         for table in self.bronze_config:
             name = table['name']
             input = table['input']
             output = os.path.join(output_prefix,f"tb_name={table['output']}")
             format = table['format']
             years = table['years']
-            logging.info(f"###### BRONZE - {name}")
+            unique_columns = table['tests']['unique']
+            not_null_columns = table['tests']['not_null']
             # INPUT
             for year in years:
-                start_time = time.time()
+                log_subsection(f" {step}: {name}/{year}", self.logger)
+                # READ
                 data = self.read_data(input,year)
                 # TRANSFORM
-                data = self.treat_columns(data)
                 data = self.treat_data(data,year)
                 # WRITE
                 self.write_data(data,output,format)
-                elapsed = time.time() - start_time
-                logging.info(f"###### BRONZE - {name},{year} - DONE IN {elapsed:.2f}s")
-
-        
-    def stop_sedona(self):
-        self.sedona.stop()
+                # TESTS
+                self.test_data(output,unique_columns,not_null_columns)

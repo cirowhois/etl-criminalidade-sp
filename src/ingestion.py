@@ -1,13 +1,26 @@
 from etl.ingestion.ibge import IbgeIngestion
 from etl.ingestion.sspsp import SSPSPIngestion
+from utils import setup_logger, log_section
 import logging
+import warnings
 
-logging.basicConfig(level=logging.INFO)
+warnings.filterwarnings('ignore')
+logger = setup_logger("Ingestion_Process", level=logging.DEBUG)
 
-logging.info("################# STARTING INGESTION PROCESS #################")
+# LOAD CONFIG
+config_path = 'config.json'
 
-IbgeIngestion('config.json').download_all()
-SSPSPIngestion('config.json').download_all()
+# LOAD ETL CLASSES
+ibge = IbgeIngestion(config_path, logger)
+sspsp = SSPSPIngestion(config_path, logger)
 
-logging.info("################# FINISHED INGESTION PROCESS #################")
+def main():
+    log_section(" STARTING INGESTION PROCESS ", logger)
 
+    ibge.download_all()
+    sspsp.download_all()
+
+    log_section(" INGESTION PROCESS DONE ", logger)
+
+if __name__ == "__main__":
+    main()

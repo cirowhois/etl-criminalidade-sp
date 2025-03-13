@@ -26,31 +26,27 @@
     - openpyxl==3.1.5
     - pyarrow==19.0.1
     - pydeck==0.9.1
+    - unidecode==1.3.8
 ```
 ### Estrutura:
 - src
     - data
-        - raw 
-
-            _Dado original conforme presente na fonte (formato, colunas, estrutura no geral)_
-        - dispatch 
-
-            _Dado com a estrutura original, mas salvo em .geoparquet, com alguns filtros e definição da coluna geom_
-        - processed 
-
-            _Dado com a estrutura e tratamentos finais, índices e tudo mais proposto no projeto para abrir com o kepler.gl_
+        - landing_area: _Dado original conforme presente na fonte (formato, colunas, estrutura no geral)_
+        - bronze: _Dado com a estrutura original, em .parquet, com campos de versão_
+        - silver: _Dado em tratamento, com 'geometry field' e deduplicado_
+        - gold: _Dado com a estrutura e tratamentos finais, índices e tudo mais proposto no projeto para abrir com o pydeck_
     - etl
         - ingestion
             - `ibge.py`
             - `sspsp.py`
-        - transformation _(em construção)_
-    - `config.json` 
-
-        _Configurações do projeto_
-    - `ingestion.py`
-
-        _Ingestão/download dos dados de base_
+        - steps
+            - `bronze.py`
+            - `silver.py`
+            - `gold.py`
+        - logs
+    - `config.json`
+    - `ingestion.py`: _Ingestão/download dos dados de base_
+    - `etl_process.py`: _ETL do projeto_
+- venv: _Ambiente virtual do projeto_
 - `requirements.txt`
-- `setup.sh`
-
-    _Configura o ambiente com as bibliotecas necessárias_
+- `setup.sh`: _Configura o ambiente com as bibliotecas necessárias_
