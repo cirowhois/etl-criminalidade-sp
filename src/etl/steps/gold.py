@@ -38,19 +38,19 @@ class GoldStep:
                                 .when((f.col("POP_TOTAL").isNull()) |
                                       (f.col("TOTAL_CRIMES").isNull()) |
                                       (f.col("POP_TOTAL") == 0), 0) \
-                                .otherwise((f.col("TOTAL_CRIMES") / f.col("POP_TOTAL")) * 100000)
+                                .otherwise((f.col("TOTAL_CRIMES") / f.col("POP_TOTAL")) * 1000)
                                 .cast("double")) \
                     .withColumn("CELLPHONE_CRIME_INDEX",
                                f.when((f.col("POP_TOTAL").isNull()) |
                                       (f.col("FURTO_ROUBO_DE_CELULAR").isNull()) |
                                       (f.col("POP_TOTAL") == 0),0) \
-                                .otherwise((f.col("FURTO_ROUBO_DE_CELULAR") / f.col("POP_TOTAL")) * 100000)
+                                .otherwise((f.col("FURTO_ROUBO_DE_CELULAR") / f.col("POP_TOTAL")) * 1000)
                                 .cast("double")) \
                     .withColumn("VEHICLE_CRIME_INDEX",
                                f.when((f.col("POP_TOTAL").isNull()) |
                                       (f.col("FURTO_ROUBO_DE_VEICULO").isNull()) |
                                       (f.col("POP_TOTAL") == 0),0) \
-                                .otherwise((f.col("FURTO_ROUBO_DE_VEICULO") / f.col("POP_TOTAL")) * 100000)
+                                .otherwise((f.col("FURTO_ROUBO_DE_VEICULO") / f.col("POP_TOTAL")) * 1000)
                                 .cast("double")) \
                     .withColumn("ID_SC_CRIME",f.sha2(f.concat_ws("|",*[f.col(x).cast('string') for x in ["ID_SC","YEAR_INFO"]]),256))
         return data

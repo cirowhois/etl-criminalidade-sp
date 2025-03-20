@@ -49,7 +49,7 @@ def setup_logger(name: str, level=logging.INFO) -> logging.Logger:
     logger = logging.getLogger(name)
     logger.setLevel(level)
 
-    log_dir = "etl/logs"
+    log_dir = "/home/cirowhois/CODE/etl-criminalidade-sp/src/logs"
     os.makedirs(log_dir, exist_ok=True)
     timestamp = time.strftime("%Y%m%d_%H%M%S")
     log_file = os.path.join(log_dir, f"{timestamp}_{name}.log")

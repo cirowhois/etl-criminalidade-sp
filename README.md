@@ -26,6 +26,7 @@
     - openpyxl==3.1.5
     - pyarrow==19.0.1
     - pydeck==0.9.1
+    - keplergl==0.3.2
     - unidecode==1.3.8
 ```
 ### Estrutura:
@@ -50,3 +51,7 @@
 - venv: _Ambiente virtual do projeto_
 - `requirements.txt`
 - `setup.sh`: _Configura o ambiente com as bibliotecas necessárias_
+
+### Exemplos 
+<iframe src="html/kepler/mapa_mun_2024.html" width="100%" height="600px"></iframe>
+
