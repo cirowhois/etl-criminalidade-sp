@@ -48,10 +48,11 @@
     - `config.json`
     - `ingestion.py`: _Ingestão/download dos dados de base_
     - `etl_process.py`: _ETL do projeto_
+- html/kepler _exemplos de uso do dado_
+    - mapa_geral_campinas.html
+    - mapa_scs_rmc_2024.html
+    - mapa_mun_2024.html
 - venv: _Ambiente virtual do projeto_
 - `requirements.txt`
 - `setup.sh`: _Configura o ambiente com as bibliotecas necessárias_
-
-### Exemplos 
-<iframe src="html/kepler/mapa_mun_2024.html" width="100%" height="600px"></iframe>
 
