@@ -1,0 +1,49 @@
+2025-03-19 19:15:24 - INGESTION - INFO - ########### STARTING INGESTION PROCESS ###########
+2025-03-19 19:15:24 - INGESTION - INFO - ##########  IBGE - DOWNLOAD
+2025-03-19 19:15:24 - INGESTION - INFO - ##########  IBGE: Agregados_por_setores_basico_BR.zip
+2025-03-19 19:15:25 - INGESTION - INFO - download: 0.67s
+2025-03-19 19:15:26 - INGESTION - INFO - unzip: 1.15s
+2025-03-19 19:15:26 - INGESTION - INFO - ##########  IBGE: BR_setores_CD2022.gpkg
+2025-03-19 19:16:31 - INGESTION - INFO - download: 65.27s
+2025-03-19 19:16:31 - INGESTION - INFO - download_all: 67.08s
+2025-03-19 19:16:31 - INGESTION - INFO - ##########  SSPSP - DOWNLOAD
+2025-03-19 19:16:31 - INGESTION - INFO - ##########  SSPSP: CelularesSubtraidos_2024.xlsx
+2025-03-19 19:16:41 - INGESTION - INFO - download: 10.08s
+2025-03-19 19:16:41 - INGESTION - INFO - ##########  SSPSP: CelularesSubtraidos_2023.xlsx
+2025-03-19 19:16:51 - INGESTION - INFO - download: 9.80s
+2025-03-19 19:16:51 - INGESTION - INFO - ##########  SSPSP: CelularesSubtraidos_2022.xlsx
+2025-03-19 19:16:56 - INGESTION - INFO - download: 4.44s
+2025-03-19 19:16:56 - INGESTION - INFO - ##########  SSPSP: CelularesSubtraidos_2021.xlsx
+2025-03-19 19:17:00 - INGESTION - INFO - download: 4.56s
+2025-03-19 19:17:00 - INGESTION - INFO - ##########  SSPSP: CelularesSubtraidos_2020.xlsx
+2025-03-19 19:17:04 - INGESTION - INFO - download: 3.52s
+2025-03-19 19:17:04 - INGESTION - INFO - ##########  SSPSP: CelularesSubtraidos_2019.xlsx
+2025-03-19 19:17:10 - INGESTION - INFO - download: 5.78s
+2025-03-19 19:17:10 - INGESTION - INFO - ##########  SSPSP: CelularesSubtraidos_2018.xlsx
+2025-03-19 19:17:15 - INGESTION - INFO - download: 5.02s
+2025-03-19 19:17:15 - INGESTION - INFO - ##########  SSPSP: CelularesSubtraidos_2017.xlsx
+2025-03-19 19:17:25 - INGESTION - INFO - download: 10.16s
+2025-03-19 19:17:25 - INGESTION - INFO - ##########  SSPSP: VeiculosSubtraidos_2024.xlsx
+2025-03-19 19:17:28 - INGESTION - INFO - download: 3.16s
+2025-03-19 19:17:28 - INGESTION - INFO - ##########  SSPSP: VeiculosSubtraidos_2023.xlsx
+2025-03-19 19:17:36 - INGESTION - INFO - download: 7.76s
+2025-03-19 19:17:36 - INGESTION - INFO - ##########  SSPSP: VeiculosSubtraidos_2022.xlsx
+2025-03-19 19:17:38 - INGESTION - INFO - download: 2.45s
+2025-03-19 19:17:38 - INGESTION - INFO - ##########  SSPSP: VeiculosSubtraidos_2021.xlsx
+2025-03-19 19:17:40 - INGESTION - INFO - download: 2.17s
+2025-03-19 19:17:40 - INGESTION - INFO - ##########  SSPSP: VeiculosSubtraidos_2020.xlsx
+2025-03-19 19:17:45 - INGESTION - INFO - download: 4.45s
+2025-03-19 19:17:45 - INGESTION - INFO - ##########  SSPSP: VeiculosSubtraidos_2019.xlsx
+2025-03-19 19:17:51 - INGESTION - INFO - download: 5.88s
+2025-03-19 19:17:51 - INGESTION - INFO - ##########  SSPSP: VeiculosSubtraidos_2018.xlsx
+2025-03-19 19:17:54 - INGESTION - INFO - download: 3.08s
+2025-03-19 19:17:54 - INGESTION - INFO - ##########  SSPSP: VeiculosSubtraidos_2017.xlsx
+2025-03-19 19:17:57 - INGESTION - INFO - download: 3.75s
+2025-03-19 19:17:57 - INGESTION - INFO - ##########  SSPSP: SPDadosCriminais_2024.xlsx
+2025-03-19 19:18:04 - INGESTION - INFO - download: 6.22s
+2025-03-19 19:18:04 - INGESTION - INFO - ##########  SSPSP: SPDadosCriminais_2023.xlsx
+2025-03-19 19:18:10 - INGESTION - INFO - download: 6.76s
+2025-03-19 19:18:10 - INGESTION - INFO - ##########  SSPSP: SPDadosCriminais_2022.xlsx
+2025-03-19 19:18:17 - INGESTION - INFO - download: 6.74s
+2025-03-19 19:18:17 - INGESTION - INFO - download_all: 105.77s
+2025-03-19 19:18:17 - INGESTION - INFO - ############# INGESTION PROCESS DONE #############

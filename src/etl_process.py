@@ -23,12 +23,12 @@ def main():
 
     # BRONZE
     log_section(" BRONZE ", logger)
-    #bronze.tables()
+    bronze.tables()
 
     # SILVER
     log_section(" SILVER ", logger)
-    #silver_ibge.tables()
-    #silver_sspsp.tables()
+    silver_ibge.tables()
+    silver_sspsp.tables()
 
     #GOLD
     log_section(" GOLD ", logger)

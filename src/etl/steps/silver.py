@@ -305,7 +305,8 @@ class SilverSspspStep:
                         f.coalesce(f.dayofmonth("DATA_OCORRENCIA_BO"), f.lit(1)).alias("DAY_INFO"),
                         f.col(month).alias("MONTH_INFO"),
                         f.col(year).alias("YEAR_INFO"),
-                        f.col('NATUREZA_APURADA').alias("CRIMINAL_TYPE")
+                        f.when(f.upper(f.col('NATUREZA_APURADA')).isin('FURTO DE VEÍCULO','ROUBO DE VEÍCULO'),'FURTO ROUBO DE VEICULO') \
+                            .otherwise(f.col('NATUREZA_APURADA')).alias("CRIMINAL_TYPE")
                         )
         # CLEANING COLUMNS
         data = self.treat_columns(data)

@@ -5,7 +5,7 @@ import logging
 import warnings
 
 warnings.filterwarnings('ignore')
-logger = setup_logger("Ingestion_Process", level=logging.DEBUG)
+logger = setup_logger("INGESTION", level=logging.DEBUG)
 
 # LOAD CONFIG
 config_path = 'config.json'
