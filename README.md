@@ -24,7 +24,8 @@ Para gerar os exemplos foi utilizado o [kepler.gl Jupyter](https://docs.kepler.g
 ### Preparar o ambiente
 - Clonar o projeto;
 - Criar um ambiente virtual (chamado _venv_ mesmo) na pasta do projeto;
-- Executar o `setup.sh`.
+- Executar o `setup.sh`;
+- Obs: É necessário ter o Python e o Spark instalados na máquina. Aqui foram utilizados `Spark 3.5.3/Scala 2.12` e o `Python 3.12.3`.
 
 ### ETL
 - **Ingestão**: em _src_ executar o `ingestion.py`. Os dados serão salvos em _src/data/landing_area_ \
