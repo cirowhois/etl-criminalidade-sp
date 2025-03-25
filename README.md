@@ -50,5 +50,5 @@ PAra gerar outros exemplos de outras áreas e outros períodos é só utilizar o
 Este projeto é um projeto de conclusão de curso. O uso do script é livre, mas o uso e a divulgação dos dados podem estar sujeitos às regras de cada fonte, especialmente da Secretaria de Segurança Pública de São Paulo.
 
 ## Contato
-[Linkedin - Ciro](https://www.linkedin.com/in/ciroruiz95/)
+[Linkedin - Ciro](https://www.linkedin.com/in/ciroruiz95/) \
 [Instagram - CartoArte](https://www.instagram.com/cartoarte/)
