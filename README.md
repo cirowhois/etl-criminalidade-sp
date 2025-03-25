@@ -33,7 +33,7 @@ Para gerar os exemplos foi utilizado o [kepler.gl Jupyter](https://docs.kepler.g
 - **Logs**: Os logs serão gerados em _src/logs_, o `log_reader.py` gera um csv para os logs do ETL. 
 
 ### Resultados
-Foram gerados três exemplos de mapas de acordo com os níveis geográficos para os dados tratados no projeto (Ocorrência, Setores Censitários e Municípios) em _html/kepler_: \
+Foram gerados três exemplos de mapas de acordo com os níveis geográficos para os dados tratados no projeto (Ocorrência, Setores Censitários e Municípios) em _html/kepler_:
 - Ocorrências: [mapa_geral_campinas.html](https://github.com/cirowhois/etl-criminalidade-sp/blob/main/html/kepler/mapa_geral_campinas.html)
 - Setores Censitários: [mapa_scs_rmc_2024.html](https://github.com/cirowhois/etl-criminalidade-sp/blob/main/html/kepler/mapa_scs_rmc_2024.html)
 - Municípios: [mapa_mun_2024.html](https://github.com/cirowhois/etl-criminalidade-sp/blob/main/html/kepler/mapa_mun_2024.html)
