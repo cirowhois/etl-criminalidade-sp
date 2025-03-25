@@ -28,8 +28,8 @@ Para gerar os exemplos foi utilizado o [kepler.gl Jupyter](https://docs.kepler.g
 - Obs: É necessário ter o Python e o Spark instalados na máquina. Aqui foram utilizados `Spark 3.5.3/Scala 2.12` e o `Python 3.12.3`.
 
 ### ETL
-- **Ingestão**: em _src_ executar o `ingestion.py`. Os dados serão salvos em _src/data/landing_area_ \
-- **ETL**: em _src_ executar o `etl_process.py`. Os dados serão salvos em _src/data/bronze ou silver ou gold/tb_name=_ \
+- **Ingestão**: em _src_ executar o `ingestion.py`. Os dados serão salvos em _src/data/landing_area_ 
+- **ETL**: em _src_ executar o `etl_process.py`. Os dados serão salvos em _src/data/bronze ou silver ou gold/tb_name=_ 
 - **Logs**: Os logs serão gerados em _src/logs_, o `log_reader.py` gera um csv para os logs do ETL. 
 
 ### Resultados
