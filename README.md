@@ -9,6 +9,8 @@ O projeto utilizou o [Apache Sedona - antigo Geospark -](https://sedona.apache.o
 
 Para gerar os exemplos foi utilizado o [kepler.gl Jupyter](https://docs.kepler.gl/docs/keplergl-jupyter), onde a partir de um notebook e de um dataset, é possível gerar um html contendo um mapa interativo desse dataset.
 
+  ![RMC CRIMINALIDADE GIF](https://github.com/user-attachments/assets/746a196e-ad47-48f8-beb4-76dfee366757)
+
 
 ## Fontes
 - SSPSP: https://www.ssp.sp.gov.br/estatistica/consultas
@@ -37,6 +39,7 @@ Foram gerados três exemplos de mapas de acordo com os níveis geográficos para
 - Ocorrências: [mapa_geral_campinas.html](https://github.com/cirowhois/etl-criminalidade-sp/blob/main/html/kepler/mapa_geral_campinas.html)
 - Setores Censitários: [mapa_scs_rmc_2024.html](https://github.com/cirowhois/etl-criminalidade-sp/blob/main/html/kepler/mapa_scs_rmc_2024.html)
 - Municípios: [mapa_mun_2024.html](https://github.com/cirowhois/etl-criminalidade-sp/blob/main/html/kepler/mapa_mun_2024.html)
+
     
 Basta baixar o html e abrir no navegador, ele contém um mapa interativo - _um 'webgis alike'_ - que permite visualizar o conjunto de dados usado em cada exemplo. \
 PAra gerar outros exemplos de outras áreas e outros períodos é só utilizar o `maps_examples.ipynb`.
