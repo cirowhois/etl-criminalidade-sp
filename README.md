@@ -46,8 +46,8 @@ PAra gerar outros exemplos de outras áreas e outros períodos é só utilizar o
 
 
 ## Arquitetura Geral e Lineage
-![etl_ciro drawio (3)](https://github.com/user-attachments/assets/435c6bd4-b4f2-472f-a290-566da90dac4d)
-![image](https://github.com/user-attachments/assets/7a97c77c-06c9-4cc5-874d-f1533dbdf16b)
+![lineage drawio](https://github.com/user-attachments/assets/b9d604e4-afa0-4869-8f9f-121ae7e6c650)
+
 
 ## Licença
 Este projeto é um projeto de conclusão de curso. O uso do script é livre, mas o uso e a divulgação dos dados podem estar sujeitos às regras de cada fonte, especialmente da Secretaria de Segurança Pública de São Paulo.
