@@ -1,0 +1,4 @@
+src/logs/*
+src/data/*
+src/etl/__pycache__/*
+src/etl/steps/__pycache__/*
